@@ -3,10 +3,6 @@ import random
 import sys
 import time
 
-# TODOS:
-#   -> Add more formatting
-#   -> Check for possible validations
-
 # What each library is being used for:
 #   os       : used to clear the screen
 #   random   : used to shuffle the words
