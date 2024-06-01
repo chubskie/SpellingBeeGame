@@ -4,7 +4,6 @@ import sys
 import time
 
 # TODOS:
-#   -> Refactor order of leaderboard 2d list
 #   -> Add more formatting
 #   -> Check for possible validations
 
@@ -50,7 +49,8 @@ def print_title():
 
   cls()
   print(title)
-  print("\033[1mMAIN MENU\033[0m")
+  print("\033[1m\033[1;33mMAIN MENU\033[0m")
+  print()
   print("\033[1;33m[1]\033[0m Start Game")
   print("\033[1;33m[2]\033[0m Leaderboards")
   print("\033[1;33m[3]\033[0m Exit")
@@ -60,7 +60,16 @@ def print_title():
 # Function to print the game mode title.
 def print_second_title():
   cls()
-  print("\033[1mChoose Game Mode:\033[0m")
+  title = """\033[1;33m
+      _____ ___    __  ___ ____  __  ___ ____   ___   ____
+     / ___// _ |  /  |/  // __/ /  |/  // __ \ / _ \ / __/
+    / (_ // __ | / /|_/ // _/  / /|_/ // /_/ // // // _/  
+    \___//_/ |_|/_/  /_//___/ /_/  /_/ \____//____//___/           
+  \033[0m"""
+  print(title)
+  print()
+  print("\033[1m\033[1;33mChoose Game Mode:\033[0m")
+  print()
   print("\033[1;33m[1]\033[0m Classic Words")
   print("\033[1;33m[2]\033[0m Slang Words")
   print("\033[1;33m[3]\033[0m Back to Main Menu")
@@ -164,8 +173,8 @@ def load_leaderboard(mode):
 
     # Append leaderboard file contents to leaderboard list per line
     for line in leaderboard_file:
-      name, score, total_time = line.strip().split(",")
-      leaderboard.append((name, int(score), float(total_time)))
+      name, total_time, score = line.strip().split(",")
+      leaderboard.append((name, float(total_time), int(score)))
 
     # Close classic leaderboard text file
     leaderboard_file.close()
@@ -175,8 +184,8 @@ def load_leaderboard(mode):
 
     # Append leaderboard file contents to leaderboard list per line
     for line in leaderboard_file:
-      name, score, total_time = line.strip().split(",")
-      leaderboard.append((name, int(score), float(total_time)))
+      name, total_time, score = line.strip().split(",")
+      leaderboard.append((name, float(total_time), int(score)))
 
     # Close slang leaderboard text file
     leaderboard_file.close()
@@ -220,10 +229,10 @@ def display_leaderboard(mode):
   for entry in leaderboard:
 
     # entry[0]  : name
-    # entry[1]  : score
-    # entry[2]  : total time
+    # entry[1]  : total time
+    # entry[2]  : score
 
-    print(f"    #{rank:<13}{entry[0]:<13}{entry[2]:<14.2f}{entry[1]:<14}")
+    print(f"    #{rank:<13}{entry[0]:<13}{entry[1]:<14.2f}{entry[2]:<14}")
 
     # Increment rank counter
     rank += 1
@@ -312,7 +321,7 @@ def play_game_one(word_list):
     cls()
 
     # Print given item
-    print(f"\n[{index}/21] Spell the word: \033[1;33m{word}\033[0m\n")
+    print(f"\n[{index}/21] \033[1;33m{word}\033[0m\n")
 
     # Ask for user input
     user_input = input("Answer: ")
@@ -336,11 +345,11 @@ def play_game_one(word_list):
   total_time = end_time - start_time
 
   # Print game results
-  print()
-  print("=========== RESULTS ===========")
-  print(f"Number of Correct Words: {correct_words_count}/21")
-  print(f"Total Time: {total_time:.2f} seconds")
-  print(f"Score: {score} pts.")
+  cls()
+  print("\033[1;33m=========== RESULTS ===========\033[0m")
+  print(f"Number of Correct Words: \033[1;33m{correct_words_count}/21\033[0m")
+  print(f"Total Time: \033[1;33m{total_time:.2f} seconds\033[0m")
+  print(f"Score: \033[1;33m{score} pts.\033[0m")
   print()
 
   # Check if all items are answered correctly
@@ -348,7 +357,7 @@ def play_game_one(word_list):
     print("YOU GOT A PERFECT SCORE!")
   else:
     # If score is not perfect, list down all mispelled words and show user input
-    print("===== MISSPELLED WORDS ======")
+    print("\033[0;31m===== MISSPELLED WORDS ======\033[0m")
     for word in misspelled_words:
       print(f"{word[0]} (You typed \"\033[0;31m{word[1]}\033[0m\")")
   print()
@@ -363,18 +372,18 @@ def play_game_one(word_list):
       print("Please enter a name.\n")
 
   # Return the name, score, and the total time
-  return name, score, total_time
+  return name, total_time, score
 
 
 # Game logic for Slang Game Mode
 def play_game_two(word_list):
-  
+
   # Initialize the following:
   #   - Score
   #   - Correct Item Counter
   #   - Index Counter
   #   - Misspelled Words List
-  
+
   score = 0
   correct_words_count = 0
   index = 1
@@ -389,7 +398,7 @@ def play_game_two(word_list):
     cls()
 
     # Print given item
-    print(f"\n[{index}/10] Spell the word: \033[1;33m{word}\033[0m\n")
+    print(f"\n[{index}/10] \033[1;33m{word}\033[0m\n")
 
     # Ask for user input
     user_input = input("Answer: ")
@@ -413,11 +422,11 @@ def play_game_two(word_list):
   total_time = end_time - start_time
 
   # Print game results
-  print()
-  print("=========== RESULTS ===========")
-  print(f"Number of Correct Words: {correct_words_count}/10")
-  print(f"Total Time: {total_time:.2f} seconds")
-  print(f"Score: {score} pts.")
+  cls()
+  print("\033[1;33m=========== RESULTS ===========\033[0m")
+  print(f"Number of Correct Words: \033[1;33m{correct_words_count}/10\033[0m")
+  print(f"Total Time: \033[1;33m{total_time:.2f} seconds\033[0m")
+  print(f"Score: \033[1;33m{score} pts.\033[0m")
   print()
 
   # Check if all items are answered correctly
@@ -425,7 +434,7 @@ def play_game_two(word_list):
     print("YOU GOT A PERFECT SCORE!")
   else:
     # If score is not perfect, list down all mispelled words and show user input
-    print("===== MISSPELLED WORDS ======")
+    print("\033[0;31m===== MISSPELLED WORDS ======\033[0m")
     for word in misspelled_words:
       print(f"{word[0]} (You typed \"\033[0;31m{word[1]}\033[0m\")")
   print()
@@ -440,14 +449,15 @@ def play_game_two(word_list):
       print("Please enter a name.\n")
 
   # Return the name, score, and the total time
-  return name, score, total_time
+  return name, total_time, score
+
 
 # Main Program
 def main():
 
   # Main Menu
   while True:
-    
+
     print_title()
 
     # Ask user input
@@ -471,18 +481,17 @@ def main():
           words = load_words(game_mode_choice)
 
           # Run game logic
-          name, score, total_time = play_game_one(words)
+          name, total_time, score = play_game_one(words)
 
           # Add entry to leaderboard
           leaderboard = load_leaderboard(game_mode_choice)
-          leaderboard.append([name, score, total_time])
+          leaderboard.append([name, total_time, score])
           leaderboard = refresh_leaderboard(leaderboard)
           save_leaderboard(game_mode_choice, leaderboard)
 
           print()
 
           # Show leaderboard
-          input("Press ENTER to view leaderboard...")
           display_leaderboard(game_mode_choice)
 
           # Back to Main Menu
@@ -495,20 +504,19 @@ def main():
 
           # Initialize word list
           words = load_words(game_mode_choice)
-          
+
           # Run game logic
-          name, score, total_time = play_game_two(words)
+          name, total_time, score = play_game_two(words)
 
           # Add entry to leaderboard
           leaderboard = load_leaderboard(game_mode_choice)
-          leaderboard.append([name, score, total_time])
+          leaderboard.append([name, total_time, score])
           leaderboard = refresh_leaderboard(leaderboard)
           save_leaderboard(game_mode_choice, leaderboard)
 
           print()
 
           # Show leaderboard
-          input("Press ENTER to view leaderboard...")
           display_leaderboard(game_mode_choice)
 
           # Back to Main Menu
@@ -525,7 +533,16 @@ def main():
         cls()
 
         # Show leaderboard menu
-        print("Which leaderboard do you want to see?")
+        title = """\033[1;33m
+         ___   ___    _  __ __ __ ____ _  __ _____
+        / _ \ / _ |  / |/ // //_//  _// |/ // ___/
+       / , _// __ | /    // ,<  _/ / /    // (_ / 
+      /_/|_|/_/ |_|/_/|_//_/|_|/___//_/|_/ \___/  
+        \033[0m"""
+        print(title)
+        print()
+        print("\033[1;33mWhich leaderboard do you want to see?\033[0m")
+        print()
         print("[1] Classic Mode")
         print("[2] Slang Mode")
         print("[3] Back to Main Menu")
@@ -542,13 +559,16 @@ def main():
           break
         # Validation
         else:
-          display_leaderboard(leaderboard_choice)
+          print("Invalid choice. Press ENTER to try again.")
+          input()
+
     # [3] EXIT PROGRAM
     elif choice == "3":
       print("\nThanks for playing!")
       sys.exit()
     else:
       input("Invalid option. Press ENTER to try again.")
+
 
 # Run
 main()
