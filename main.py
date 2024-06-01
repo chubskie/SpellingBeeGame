@@ -240,8 +240,8 @@ def display_leaderboard(mode):
 # A function to update the leaderboard based on game mode.
 def save_leaderboard(mode, leaderboard):
   # entry[0]  : name
-  # entry[1]  : score
-  # entry[2]  : total time
+  # entry[1]  : total time
+  # entry[2]  : score
 
   # Check game mode if classic (1) or slang (2)
   if mode == "1":
@@ -268,12 +268,9 @@ def refresh_leaderboard(leaderboard):
     for j in range(i + 1, len(leaderboard)):
       # Check if score is less than the next score
       # or if score is equal and total time is greater
-      if (leaderboard[i][1] < leaderboard[j][1]
-          or leaderboard[i][1] == leaderboard[j][1]
-          and leaderboard[i][2] > leaderboard[j][2]):
+      if leaderboard[i][2] < leaderboard[j][2] or leaderboard[i][2] == leaderboard[j][2] and leaderboard[i][1] > leaderboard[j][1]:
         # Swap positions
         leaderboard[i], leaderboard[j] = leaderboard[j], leaderboard[i]
-
   # Get only the top 10
   leaderboard = leaderboard[:10]
 
