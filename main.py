@@ -8,41 +8,71 @@ def cls():
 
 # ================ TITLES ==================
 def print_title():
-  title = """
-  ||====================================================||
-  ||====================================================||
-  ||   ________  ___  ___       ________  _________     ||
-  ||  |\   __  \|\  \|\  \     |\   __  \|\___   ___\   ||
-  ||  \ \  \|\ /\ \  \ \  \    \ \  \|\  \|___ \  \_|   ||
-  ||   \ \   __  \ \  \ \  \    \ \   __  \   \ \  \    ||
-  ||    \ \  \|\  \ \  \ \  \____\ \  \ \  \   \ \  \   ||
-  ||     \ \_______\ \__\ \_______\ \__\ \__\   \ \__\  ||
-  ||      \|_______|\|__|\|_______|\|__|\|__|    \|__|  ||
-  ||====================================================||
-  ||====================================================||
+  title = """\033[1;33m
+  ||   ____  _  _  ____  ____  __  __    __    ___  ____  ____  ____   ||
+  ||  (_  _)( \/ )(  _ \( ___)(  \/  )  /__\  / __)(_  _)( ___)(  _ \  ||
+  ||    )(   \  /  )___/ )__)  )    (  /(__)\ \__ \  )(   )__)  )   /  ||
+  ||   (__)  (__) (__)  (____)(_/\/\_)(__)(__)(___/ (__) (____)(_)\_)  ||
+  \033[0m
   """
   cls()
   print(title)
   print("\033[1mMAIN MENU\033[0m")
-  print("[1] Start Game")
-  print("[2] Leaderboards")
-  print("[3] Exit")
+  print("\033[1;33m[1]\033[0m Start Game")
+  print("\033[1;33m[2]\033[0m Leaderboards")
+  print("\033[1;33m[3]\033[0m Exit")
   print()
 
 
 def print_second_title():
   cls()
-  print("Choose Game Mode:")
-  print("=================")
-  print("[1] Classic Words")
-  print("[2] Slang Words")
-  print("[3] Back to Main Menu")
+  print("\033[1mChoose Game Mode:\033[0m")
+  print("\033[1;33m[1]\033[0m Classic Words")
+  print("\033[1;33m[2]\033[0m Slang Words")
+  print("\033[1;33m[3]\033[0m Back to Main Menu")
+  print()
+
+
+# ============ RULES ==============
+def print_game_one_rules():
+  cls()
+  print("======= RULES ========")
+  print("1. You will be given 21 random words of varying lengths.")
+  print("2. Earned points will vary based on the length of the word.")
+  print(
+      "3. After each game, you will be able to see the words you've misspelled."
+  )
+  print(
+      "4. Your ranking will be based first on your score, and then on your time."
+  )
+  print("======================")
+  print()
+  print("======= SCORE ========")
+  print("3-letter Words = 2 pts.")
+  print("4-letter Words = 5 pts.")
+  print("5-letter Words = 7 pts.")
+  print("======================")
+  print()
+
+
+def print_game_two_rules():
+  cls()
+  print("======= RULES ========")
+  print("1. You will be given 10 random slang words.")
+  print("2. Earned correctly spelled word gives you 5 pts.")
+  print(
+      "3. After each game, you will be able to see the words you've misspelled."
+  )
+  print(
+      "4. Your ranking will be based first on your score, and then on your time."
+  )
+  print("======================")
   print()
 
 
 # ============ INITIALIZATION ==============
 def choose_random(word_list, size):
-  return word_list[:size]
+  return random.sample(word_list, size)
 
 
 def load_words(mode):
@@ -72,11 +102,109 @@ def load_words(mode):
   else:
     sys.exit("INVALID MODE. PLEASE DEBUG.")
 
+  word_list = random.sample(word_list, len(word_list))
+  
   return word_list
+
 
 def DEBUG_list_words(word_list):
   for word in word_list:
     print(word)
+
+
+def DEBUG_leaderboard_info(name, score, total_time):
+  print(f"NAME: {name}")
+  print(f"SCORE: {score}")
+  print(f"TOTAL TIME: {total_time:.2f}")
+
+
+# ========== GAME LOGIC =============
+def add_point(word):
+  if len(word) == 3:
+    return 2
+  elif len(word) == 4:
+    return 5
+  elif len(word) == 5:
+    return 7
+  else:
+    sys.exit("INVALID LENGTH. PLEASE DEBUG.")
+
+
+def play_game_one(word_list):
+  score = 0
+  correct_words_count = 0
+  misspelled_words = []
+  start_time = time.time()
+
+  for word in word_list:
+    print(f"Spell the word: {word}\n")
+    user_input = input("Answer: ")
+
+    if user_input == word:
+      score += add_point(word)
+      correct_words_count += 1
+    else:
+      misspelled_words.append(word)
+
+  end_time = time.time()
+
+  total_time = end_time - start_time
+
+  print()
+  print("=========== RESULTS ===========")
+  print(f"Number of Correct Words: {correct_words_count}/21")
+  print(f"Total Time: {total_time:.2f} seconds")
+  print(f"Score: {score} pts.")
+  print()
+  if correct_words_count == 21:
+    print("YOU GOT A PERFECT SCORE!")
+  else:
+    print("========== MISSPELLED WORDS =============")
+    for word in misspelled_words:
+      print(word)
+  print()
+  name = input("Enter your name: ")
+
+  return name, score, total_time
+
+
+def play_game_two(word_list):
+  score = 0
+  correct_words_count = 0
+  misspelled_words = []
+  start_time = time.time()
+
+  for word in word_list:
+    print(f"Spell the word: {word}\n")
+    user_input = input("Answer: ")
+
+    if user_input == word:
+      score += 5
+      correct_words_count += 1
+    else:
+      misspelled_words.append(word)
+
+  end_time = time.time()
+
+  total_time = end_time - start_time
+
+  print()
+  print("=========== RESULTS ===========")
+  print(f"Number of Correct Words: {correct_words_count}/10")
+  print(f"Total Time: {total_time:.2f} seconds")
+  print(f"Score: {score} pts.")
+  print()
+  if correct_words_count == 10:
+    print("YOU GOT A PERFECT SCORE!")
+  else:
+    print("========== MISSPELLED WORDS =============")
+    for word in misspelled_words:
+      print(word)
+  print()
+  name = input("Enter your name: ")
+
+  return name, score, total_time
+
 
 def main_menu():
   while True:
@@ -89,15 +217,29 @@ def main_menu():
         game_mode_choice = input("Enter your choice: ")
 
         if game_mode_choice == "1":
-          print("Game One")
+          print_game_one_rules()
+          input("Press ENTER to start...")
+
           words = load_words(game_mode_choice)
-          DEBUG_list_words(words)
+          # DEBUG_list_words(words)
+          name, score, total_time = play_game_one(words)
+          print()
+          print("DEBUG")
+          print("Leaderboard Info:")
+          DEBUG_leaderboard_info(name, score, total_time)
           input()
           break
         elif game_mode_choice == "2":
-          print("Game Two")
+          print_game_two_rules()
+          input("Press ENTER to start...")
+
           words = load_words(game_mode_choice)
-          DEBUG_list_words(words)
+          # DEBUG_list_words(words)
+          name, score, total_time = play_game_two(words)
+          print()
+          print("DEBUG")
+          print("Leaderboard Info:")
+          DEBUG_leaderboard_info(name, score, total_time)
           input()
           break
         elif game_mode_choice == "3":
@@ -113,6 +255,7 @@ def main_menu():
       sys.exit()
     else:
       input("Invalid option. Press ENTER to try again.")
+
 
 # Run
 main_menu()
