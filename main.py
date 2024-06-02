@@ -25,6 +25,9 @@ import time
 #   UNDERLINE = "\033[4m"
 #   RESET = "\033[0m"
 
+# Initialize absolute path of project directory
+project_path = os.path.dirname(__file__)
+
 
 # Define console clear function
 def cls():
@@ -128,9 +131,17 @@ def load_words(mode):
 
   # Check game mode if classic (1) or slang (2)
   if mode == "1":
-    three_letter_words = open("words/three_letter_words.txt", "r")
-    four_letter_words = open("words/four_letter_words.txt", "r")
-    five_letter_words = open("words/five_letter_words.txt", "r")
+    # Get absolute file path of each word file.
+    three_letter_words_path = os.path.join(project_path, "words",
+                                           "three_letter_words.txt")
+    four_letter_words_path = os.path.join(project_path, "words",
+                                          "four_letter_words.txt")
+    five_letter_words_path = os.path.join(project_path, "words",
+                                          "five_Letter_words.txt")
+
+    three_letter_words = open(three_letter_words_path, "r")
+    four_letter_words = open(four_letter_words_path, "r")
+    five_letter_words = open(five_letter_words_path, "r")
 
     word_list = choose_random(
         three_letter_words.read().split(), 7) + choose_random(
@@ -142,7 +153,9 @@ def load_words(mode):
     five_letter_words.close()
 
   elif mode == "2":
-    slang_words = open("words/slang_words.txt", "r")
+    slang_words_path = os.path.join(project_path, "words", "slang_words.txt")
+
+    slang_words = open(slang_words_path, "r")
 
     word_list = choose_random(slang_words.read().split(), 10)
 
@@ -164,8 +177,11 @@ def load_leaderboard(mode):
 
   # Check game mode if classic (1) or slang (2)
   if mode == "1":
+    # Get absolute file path of leaderboard file
+    leaderboard_file_path = os.path.join(project_path, "rankings",
+                                         "leaderboard_one.txt")
     # Open classic leaderboard text file
-    leaderboard_file = open("rankings/leaderboard_one.txt", "r")
+    leaderboard_file = open(leaderboard_file_path, "r")
 
     # Append leaderboard file contents to leaderboard list per line
     for line in leaderboard_file:
@@ -175,8 +191,11 @@ def load_leaderboard(mode):
     # Close classic leaderboard text file
     leaderboard_file.close()
   elif mode == "2":
+    # Get absolute file path of leaderboard file
+    leaderboard_file_path = os.path.join(project_path, "rankings",
+                                         "leaderboard_two.txt")
     # Open slang leaderboard text file
-    leaderboard_file = open("rankings/leaderboard_two.txt", "r")
+    leaderboard_file = open(leaderboard_file_path, "r")
 
     # Append leaderboard file contents to leaderboard list per line
     for line in leaderboard_file:
@@ -201,7 +220,7 @@ def display_leaderboard(mode):
                / ___// /   / _ |  / __// __//  _// ___/
               / /__ / /__ / __ | _\ \ _\ \ _/ / / /__  
               \___//____//_/ |_|/___//___//___/ \___/  
-              
+
     ======================= LEADERBOARD =======================
     \033[0m"""
   elif mode == "2":
@@ -210,7 +229,7 @@ def display_leaderboard(mode):
                    / __// /   / _ |  / |/ // ___/
                   _\ \ / /__ / __ | /    // (_ / 
                  /___//____//_/ |_|/_/|_/ \___/  
-                 
+
     ======================= LEADERBOARD =======================
     \033[0m"""
   else:
@@ -245,14 +264,22 @@ def save_leaderboard(mode, leaderboard):
 
   # Check game mode if classic (1) or slang (2)
   if mode == "1":
-    leaderboard_file = open("rankings/leaderboard_one.txt", "w")
+    # Create absolute path
+    leaderboard_file_path = os.path.join(project_path, "rankings",
+                                         "leaderboard_one.txt")
+    # Open file
+    leaderboard_file = open(leaderboard_file_path, "w")
 
     for entry in leaderboard:
       leaderboard_file.write(f"{entry[0]},{entry[1]},{entry[2]}\n")
 
     leaderboard_file.close()
   elif mode == "2":
-    leaderboard_file = open("rankings/leaderboard_two.txt", "w")
+    # Create absolute path
+    leaderboard_file_path = os.path.join(project_path, "rankings",
+                                         "leaderboard_two.txt")
+    # Open file
+    leaderboard_file = open(leaderboard_file_path, "w")
 
     for entry in leaderboard:
       leaderboard_file.write(f"{entry[0]},{entry[1]},{entry[2]}\n")
@@ -268,7 +295,8 @@ def refresh_leaderboard(leaderboard):
     for j in range(i + 1, len(leaderboard)):
       # Check if score is less than the next score
       # or if score is equal and total time is greater
-      if leaderboard[i][2] < leaderboard[j][2] or leaderboard[i][2] == leaderboard[j][2] and leaderboard[i][1] > leaderboard[j][1]:
+      if leaderboard[i][2] < leaderboard[j][2] or leaderboard[i][
+          2] == leaderboard[j][2] and leaderboard[i][1] > leaderboard[j][1]:
         # Swap positions
         leaderboard[i], leaderboard[j] = leaderboard[j], leaderboard[i]
   # Get only the top 10
